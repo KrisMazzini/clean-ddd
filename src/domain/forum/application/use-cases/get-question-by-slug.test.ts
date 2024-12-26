@@ -1,7 +1,6 @@
-import { UniqueEntityId } from '@/core/entities/value-objects/unique-entity-id'
-
-import { Question } from '../../enterprise/entities/question'
-import { InMemoryQuestionsRepository } from '../repositories/in-memory/in-memory-questions-repository'
+import { Slug } from '../../enterprise/entities/value-objects/slug'
+import { makeQuestion } from '../../tests/factories/make-question'
+import { InMemoryQuestionsRepository } from '../../tests/repositories/in-memory-questions-repository'
 import { GetQuestionBySlugUseCase } from './get-question-by-slug'
 
 let questionsRepository: InMemoryQuestionsRepository
@@ -14,16 +13,14 @@ describe('Forum -> Use Case: Get Question By Slug', async () => {
   })
 
   it('should be possible to get a question by slug', async () => {
-    const newQuestion = Question.create({
-      authorId: new UniqueEntityId('1'),
-      title: 'Nova pergunta',
-      content: 'Conteúdo da pergunta',
+    const newQuestion = makeQuestion({
+      slug: Slug.create('example-question'),
     })
 
     await questionsRepository.create(newQuestion)
 
     const { question } = await sut.execute({
-      slug: 'nova-pergunta',
+      slug: 'example-question',
     })
 
     expect(question.id).toBe(newQuestion.id)
@@ -32,7 +29,7 @@ describe('Forum -> Use Case: Get Question By Slug', async () => {
   it('should not be possible to get a question using a non-existent slug', async () => {
     await expect(() =>
       sut.execute({
-        slug: 'nova-pergunta',
+        slug: 'example-question',
       }),
     ).rejects.toBeInstanceOf(Error)
   })
