@@ -41,11 +41,12 @@ describe('Forum -> Use Case: List Recent Questions', async () => {
       async (question) => await questionsRepository.create(question),
     )
 
-    const { questions } = await sut.execute({
+    const result = await sut.execute({
       page: 1,
     })
 
-    expect(questions).toEqual([
+    expect(result.isRight()).toBe(true)
+    expect(result.value?.questions).toEqual([
       expect.objectContaining({ createdAt: new Date('2025-01-17') }),
       expect.objectContaining({ createdAt: new Date('2024-12-27') }),
       expect.objectContaining({ createdAt: new Date('2024-12-26') }),
@@ -65,7 +66,10 @@ describe('Forum -> Use Case: List Recent Questions', async () => {
       page: 2,
     })
 
-    expect(page1.questions).toHaveLength(20)
-    expect(page2.questions).toHaveLength(2)
+    expect(page1.isRight()).toBe(true)
+    expect(page1.value?.questions).toHaveLength(20)
+
+    expect(page2.isRight()).toBe(true)
+    expect(page2.value?.questions).toHaveLength(2)
   })
 })

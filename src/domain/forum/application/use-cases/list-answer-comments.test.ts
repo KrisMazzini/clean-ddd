@@ -24,12 +24,13 @@ describe('Forum -> Use Case: List Answer Comments', async () => {
       async (answer) => await answerCommentsRepository.create(answer),
     )
 
-    const { answerComments } = await sut.execute({
+    const result = await sut.execute({
       answerId: 'answer-1',
       page: 1,
     })
 
-    expect(answerComments).toHaveLength(2)
+    expect(result.isRight()).toBe(true)
+    expect(result.value?.answerComments).toHaveLength(2)
   })
 
   it('should be possible to list paginated answer comments', async () => {
@@ -49,7 +50,10 @@ describe('Forum -> Use Case: List Answer Comments', async () => {
       page: 2,
     })
 
-    expect(page1.answerComments).toHaveLength(20)
-    expect(page2.answerComments).toHaveLength(2)
+    expect(page1.isRight()).toBe(true)
+    expect(page1.value?.answerComments).toHaveLength(20)
+
+    expect(page2.isRight()).toBe(true)
+    expect(page2.value?.answerComments).toHaveLength(2)
   })
 })

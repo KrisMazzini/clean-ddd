@@ -11,14 +11,13 @@ describe('Forum -> Use Case: Answer Question', async () => {
   })
 
   it('should be possible to create an answer for a question', async () => {
-    const { answer } = await sut.execute({
+    const result = await sut.execute({
       questionId: '1',
       instructorId: '1',
       content: 'Nova resposta',
     })
 
-    expect(answer.id).toBeTruthy()
-    expect(answersRepository.answers[0].id).toEqual(answer.id)
-    expect(answer.content).toBe('Nova resposta')
+    expect(result.isRight()).toBe(true)
+    expect(answersRepository.items[0]).toEqual(result.value?.answer)
   })
 })

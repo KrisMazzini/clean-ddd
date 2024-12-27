@@ -11,16 +11,13 @@ describe('Forum -> Use Case: Create Question', async () => {
   })
 
   it('should be possible to create a question', async () => {
-    const { question } = await sut.execute({
+    const result = await sut.execute({
       authorId: '1',
       title: 'Nova pergunta',
       content: 'Conteúdo da pergunta',
     })
 
-    expect(question.id).toBeTruthy()
-    expect(questionsRepository.questions[0].id).toEqual(question.id)
-    expect(question.title).toBe('Nova pergunta')
-    expect(question.slug.value).toBe('nova-pergunta')
-    expect(question.content).toBe('Conteúdo da pergunta')
+    expect(result.isRight()).toBe(true)
+    expect(questionsRepository.items[0]).toEqual(result.value?.question)
   })
 })

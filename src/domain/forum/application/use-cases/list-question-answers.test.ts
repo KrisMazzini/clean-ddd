@@ -22,12 +22,13 @@ describe('Forum -> Use Case: List Question Answers', async () => {
 
     newAnswers.forEach(async (answer) => await answersRepository.create(answer))
 
-    const { answers } = await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       page: 1,
     })
 
-    expect(answers).toHaveLength(2)
+    expect(result.isRight()).toBe(true)
+    expect(result.value?.answers).toHaveLength(2)
   })
 
   it('should be possible to list paginated question answers', async () => {
@@ -47,7 +48,10 @@ describe('Forum -> Use Case: List Question Answers', async () => {
       page: 2,
     })
 
-    expect(page1.answers).toHaveLength(20)
-    expect(page2.answers).toHaveLength(2)
+    expect(page1.isRight()).toBe(true)
+    expect(page1.value?.answers).toHaveLength(20)
+
+    expect(page2.isRight()).toBe(true)
+    expect(page2.value?.answers).toHaveLength(2)
   })
 })

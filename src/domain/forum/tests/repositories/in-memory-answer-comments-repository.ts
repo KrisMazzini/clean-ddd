@@ -6,33 +6,31 @@ import { AnswerComment } from '../../enterprise/entities/answer-comment'
 export class InMemoryAnswerCommentsRepository
   implements AnswerCommentsRepository
 {
-  public comments: AnswerComment[] = []
+  public items: AnswerComment[] = []
 
   async create(answerComment: AnswerComment) {
-    this.comments.push(answerComment)
+    this.items.push(answerComment)
   }
 
   async findById(id: string) {
-    const comment = this.comments.find(
-      (comment) => comment.id.toString() === id,
-    )
+    const item = this.items.find((item) => item.id.toString() === id)
 
-    return comment ?? null
+    return item ?? null
   }
 
   async findManyByAnswerId(answerId: string, { page }: PaginationParams) {
-    const comments = this.comments
-      .filter((answer) => answer.answerId.toString() === answerId)
+    const items = this.items
+      .filter((item) => item.answerId.toString() === answerId)
       .slice((page - 1) * 20, page * 20)
 
-    return comments
+    return items
   }
 
   async delete(answerComment: AnswerComment) {
-    const commentIndex = this.comments.findIndex(
-      (comment) => comment.id === answerComment.id,
+    const itemIndex = this.items.findIndex(
+      (item) => item.id === answerComment.id,
     )
 
-    this.comments.splice(commentIndex, 1)
+    this.items.splice(itemIndex, 1)
   }
 }

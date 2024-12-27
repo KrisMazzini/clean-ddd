@@ -24,12 +24,13 @@ describe('Forum -> Use Case: List Question Comments', async () => {
       async (answer) => await questionCommentsRepository.create(answer),
     )
 
-    const { questionComments } = await sut.execute({
+    const result = await sut.execute({
       questionId: 'question-1',
       page: 1,
     })
 
-    expect(questionComments).toHaveLength(2)
+    expect(result.isRight()).toBe(true)
+    expect(result.value?.questionComments).toHaveLength(2)
   })
 
   it('should be possible to list paginated question comments', async () => {
@@ -49,7 +50,10 @@ describe('Forum -> Use Case: List Question Comments', async () => {
       page: 2,
     })
 
-    expect(page1.questionComments).toHaveLength(20)
-    expect(page2.questionComments).toHaveLength(2)
+    expect(page1.isRight()).toBe(true)
+    expect(page1.value?.questionComments).toHaveLength(20)
+
+    expect(page2.isRight()).toBe(true)
+    expect(page2.value?.questionComments).toHaveLength(2)
   })
 })

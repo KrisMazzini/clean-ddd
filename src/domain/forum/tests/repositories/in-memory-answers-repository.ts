@@ -3,35 +3,35 @@ import { AnswersRepository } from '@/domain/forum/application/repositories/answe
 import { Answer } from '@/domain/forum/enterprise/entities/answer'
 
 export class InMemoryAnswersRepository implements AnswersRepository {
-  public answers: Answer[] = []
+  public items: Answer[] = []
 
   async create(answer: Answer) {
-    this.answers.push(answer)
+    this.items.push(answer)
   }
 
   async findById(id: string) {
-    const answer = this.answers.find((answer) => answer.id.toString() === id)
+    const item = this.items.find((item) => item.id.toString() === id)
 
-    return answer ?? null
+    return item ?? null
   }
 
   async findManyByQuestionId(questionId: string, { page }: PaginationParams) {
-    const answers = this.answers
-      .filter((answer) => answer.questionId.toString() === questionId)
+    const items = this.items
+      .filter((item) => item.questionId.toString() === questionId)
       .slice((page - 1) * 20, page * 20)
 
-    return answers
+    return items
   }
 
   async save(answer: Answer) {
-    const answerIndex = this.answers.findIndex((item) => item.id === answer.id)
+    const itemIndex = this.items.findIndex((item) => item.id === answer.id)
 
-    this.answers[answerIndex] = answer
+    this.items[itemIndex] = answer
   }
 
   async delete(answer: Answer) {
-    const answerIndex = this.answers.findIndex((item) => item.id === answer.id)
+    const itemIndex = this.items.findIndex((item) => item.id === answer.id)
 
-    this.answers.splice(answerIndex, 1)
+    this.items.splice(itemIndex, 1)
   }
 }

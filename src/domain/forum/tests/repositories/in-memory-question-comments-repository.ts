@@ -6,33 +6,31 @@ import { QuestionComment } from '../../enterprise/entities/question-comment'
 export class InMemoryQuestionCommentsRepository
   implements QuestionCommentsRepository
 {
-  public comments: QuestionComment[] = []
+  public items: QuestionComment[] = []
 
   async create(questionComment: QuestionComment) {
-    this.comments.push(questionComment)
+    this.items.push(questionComment)
   }
 
   async findById(id: string) {
-    const comment = this.comments.find(
-      (comment) => comment.id.toString() === id,
-    )
+    const item = this.items.find((item) => item.id.toString() === id)
 
-    return comment ?? null
+    return item ?? null
   }
 
   async findManyByQuestionId(questionId: string, { page }: PaginationParams) {
-    const comments = this.comments
-      .filter((answer) => answer.questionId.toString() === questionId)
+    const items = this.items
+      .filter((item) => item.questionId.toString() === questionId)
       .slice((page - 1) * 20, page * 20)
 
-    return comments
+    return items
   }
 
   async delete(questionComment: QuestionComment) {
-    const commentIndex = this.comments.findIndex(
-      (comment) => comment.id === questionComment.id,
+    const itemIndex = this.items.findIndex(
+      (item) => item.id === questionComment.id,
     )
 
-    this.comments.splice(commentIndex, 1)
+    this.items.splice(itemIndex, 1)
   }
 }
