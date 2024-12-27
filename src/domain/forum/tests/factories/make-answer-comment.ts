@@ -1,0 +1,25 @@
+import { faker } from '@faker-js/faker'
+
+import { UniqueEntityId } from '@/core/entities/value-objects/unique-entity-id'
+
+import {
+  AnswerComment,
+  AnswerCommentProps,
+} from '../../enterprise/entities/answer-comment'
+
+export function makeAnswerComment(
+  override: Partial<AnswerCommentProps> = {},
+  id?: UniqueEntityId,
+) {
+  const answerComment = AnswerComment.create(
+    {
+      authorId: new UniqueEntityId(),
+      answerId: new UniqueEntityId(),
+      content: faker.lorem.text(),
+      ...override,
+    },
+    id,
+  )
+
+  return answerComment
+}
